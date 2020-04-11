@@ -1,0 +1,18 @@
+﻿@model IEnumerable<WebStore.Models.BookViewModel>
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<h1>Список книг</h1>
+
+<table>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id .</td>
+            <td>@item.Title</td>
+            <td>@Html.ActionLink("Подробнее..", "BookDetails", new { id = item.Id })</td>
+        </tr>
+    }
+</table>
