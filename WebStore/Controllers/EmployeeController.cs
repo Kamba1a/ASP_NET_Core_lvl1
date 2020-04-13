@@ -21,12 +21,6 @@ namespace WebStore.Controllers
             };
         }
 
-        //GET: /<controller>/
-        public IActionResult Index()
-        {
-            //возвращает представление из Views-Home-Index.cshtml
-            return View();
-        }
 
         //GET: /<controller>/employees
         public IActionResult Employees()
