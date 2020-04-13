@@ -39,7 +39,7 @@ namespace WebStore
                 //контроллер по-умолчанию (имя контроллера/имя метода/действие)
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{Id?}");
 
-                endpoints.MapControllerRoute("contriller1", "{controller=Employee}/{action=Employees}/{Id?}");
+                endpoints.MapControllerRoute("controller1", "{controller=Employee}/{action=Employees}/{Id?}");
 
                 endpoints.MapControllerRoute("controller2", "{controller=Book}/{action=Books}/{Id?}");
 
