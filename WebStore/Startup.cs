@@ -37,6 +37,8 @@ namespace WebStore
                 //контроллер по-умолчанию (имя контроллера/имя метода/действие)
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{Id?}");
 
+                endpoints.MapControllerRoute("controller2", "{controller=Task}/{action=Books}/{Id?}");
+
                 //endpoints.MapGet("/", async context =>
                 //{
                 //    await context.Response.WriteAsync("Hello World!");

@@ -1,20 +1,10 @@
-﻿@model IEnumerable<WebStore.Models.EmployeeViewModel>
-
-@{
+﻿@{
     ViewData["Title"] = "Index";
 }
 
-<h1>Список работников</h1>
+<h1>Главная страница</h1>
 
-<table>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.LastName</td>
-            <td>@item.FirstName</td>
-            <td>@item.Patronymic</td>
-            <td>, @item.Age лет</td>
-            <td>@Html.ActionLink("Детали..", "Details", new { id = item.Id })</td>
-        </tr>
-    }
-</table>
+@Html.ActionLink("Перейти к списку работников >>>", "Employees")
+<br>
+<br>
+@Html.ActionLink("Перейти к списку книг >>>", "Books")
