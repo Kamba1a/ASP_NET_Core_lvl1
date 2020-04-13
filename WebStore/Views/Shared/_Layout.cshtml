@@ -1,0 +1,21 @@
+﻿
+@*Мастер-страница - содержит разметку header, footer, menu  итд (то, что повторяется на всех страницах)*@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @*Вставка названия вкладки*@
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div>
+        @*Вставка контента страницы*@
+        @RenderBody()
+    </div>
+    @*Пример вставки скриптов со страницы:
+        @RenderSection("scripts", false)
+        параметр false означает, что секция не обязательна,
+        т.е. если на какой-либо странице нет @section Scripts{...}, то ошибки не будет*@
+</body>
+</html>

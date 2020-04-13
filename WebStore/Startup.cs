@@ -30,6 +30,7 @@ namespace WebStore
                 app.UseDeveloperExceptionPage();
             }
 
+            //подключение статических ресурсов
             app.UseStaticFiles();
 
             app.UseRouting();
