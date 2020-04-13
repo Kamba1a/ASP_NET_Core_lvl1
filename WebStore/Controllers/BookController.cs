@@ -9,11 +9,11 @@ using WebStore.Models;
 
 namespace WebStore.Controllers
 {
-    public class TaskController : Controller
+    public class BookController : Controller
     {
         List<BookViewModel> _books;
 
-        public TaskController()
+        public BookController()
         {
             _books = new List<BookViewModel>{
                 new BookViewModel{Id=1, Title="Все о нашей вселенной", Author="Иванов", PagesNumber=300, Year=2017},
