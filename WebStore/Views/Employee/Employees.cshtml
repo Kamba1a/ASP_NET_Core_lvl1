@@ -1,24 +1,33 @@
 ﻿@model IEnumerable<EmployeeViewModel>
+@*для просмотра представлений без перезапуска отладчика использовать ctrl+F5*@
 
 @{
     ViewData["Title"] = "Работники";
-    Layout = null; //не использовать общее оформление для этой страницы
+    //Layout = null; //не использовать общее оформление для этой страницы
 }
 
-<h1>Список работников</h1>
-
-<table>
-    @foreach (var item in Model)
-    {
+<div style="margin-left: 25px">
+    <a asp-controller="Home" asp-action="Index"><<< На главную страницу</a> @*переход между представлениями разных контроллеров*@
+    <br>
+    @*ViewData["Title"] - копирование названия вкладки в само представление ("Работники")*@
+    <h3>Список работников</h3>
+    <br>
+    <a class="btn btn-success" asp-action="Edit">Добавить работника</a> @*переход между представлениями одного контроллера*@
+    <br>
+    <br>
+    <table class="table">
+        @foreach (var item in Model)
+        {
         <tr>
-            <td>@item.LastName</td>
-            <td>@item.FirstName</td>
-            <td>@item.Patronymic</td>
-            <td>, @item.Age лет</td>
-            <td>@Html.ActionLink("Детали..", "Details", new { id = item.Id })</td>
+            <td class="col-md-2">@item.LastName @item.FirstName @item.Patronymic</td>
+            <td class="col-md-1">@item.Age лет</td>
+            <td>
+                @Html.ActionLink("Детали...", "Details", new { id = item.Id })&nbsp; @*ссылка с передачей параметра (id)*@
+                <a class="fa fa-edit" asp-action="Edit" asp-route-id="@item.Id" style="color: green"></a>&nbsp; @*аналог @Html.ActionLink с передачей параметра*@
+                <a class="fa fa-trash-o" asp-action="Delete" asp-route-id="@item.Id" style="color: red"></a> @*аналог @Html.ActionLink("Удалить", "Delete", new { id = item.Id })*@
+            </td>
         </tr>
-    }
-</table>
-<br>
-<br>
-@Html.ActionLink("<<< Вернуться на главную страницу","Index")
+        }
+    </table>
+    <br>
+</div>
