@@ -1,0 +1,15 @@
+1. Воспроизвести код с занятия
+Добавить мастер-страницу (Layout) и всю инфраструктуру представлений.
+Поправить ссылки в навигационном меню.
+
+
+2. Создать недостающие представления из статических ресурсов
+Blog.cshtml
+BlogSingle.cshtml
+Cart.cshtml
+Checkout.cshtml
+ContactUs.cshtml
+Login.cshtml
+NotFound.cshtml
+ProductDetails.cshtml
+Shop.cshtml

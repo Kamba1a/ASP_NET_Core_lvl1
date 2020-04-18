@@ -30,6 +30,9 @@ namespace WebStore
                 app.UseDeveloperExceptionPage();
             }
 
+            //подключение статических ресурсов
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -37,7 +40,9 @@ namespace WebStore
                 //контроллер по-умолчанию (имя контроллера/имя метода/действие)
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{Id?}");
 
-                endpoints.MapControllerRoute("controller2", "{controller=Task}/{action=Books}/{Id?}");
+                endpoints.MapControllerRoute("controller1", "{controller=Employee}/{action=Employees}/{Id?}");
+
+                endpoints.MapControllerRoute("controller2", "{controller=Book}/{action=Books}/{Id?}");
 
                 //endpoints.MapGet("/", async context =>
                 //{
