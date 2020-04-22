@@ -9,5 +9,6 @@ namespace WebStore.Infrastructure.Interfaces
     public interface ICatalogData
     {
         public IEnumerable<BrandViewModel> GetAllBrands();
+        public IEnumerable<CategoryViewModel> GetAllCategories();
     }
 }
