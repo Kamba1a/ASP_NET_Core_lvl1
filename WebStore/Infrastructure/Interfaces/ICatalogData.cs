@@ -10,5 +10,6 @@ namespace WebStore.Infrastructure.Interfaces
     {
         public IEnumerable<BrandViewModel> GetAllBrands();
         public IEnumerable<CategoryViewModel> GetAllCategories();
+        public IEnumerable<ProductViewModel> GetAllProducts();
     }
 }
