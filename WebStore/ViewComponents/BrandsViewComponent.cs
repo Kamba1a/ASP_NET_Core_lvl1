@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
 
@@ -19,20 +20,22 @@ namespace WebStore.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var brands = GetBrands();
+            List<BrandViewModel> brands = GetBrands();
             return View(brands);
         }
 
-        private IEnumerable<BrandViewModel> GetBrands()
+        private List<BrandViewModel> GetBrands()
         {
-            var dbBrands = _productData.GetBrands();
-            return dbBrands.Select(b => new BrandViewModel
+            IEnumerable<Brand> allBrands = _productData.GetBrands();
+            List<BrandViewModel> allBrandsList = allBrands.Select(brand => new BrandViewModel
             {
-                Id = b.Id,
-                Name = b.Name,
-                Order = b.Order,
+                Id = brand.Id,
+                Name = brand.Name,
+                Order = brand.Order,
                 ProductsCount = 0
             }).OrderBy(b => b.Order).ToList();
+
+            return allBrandsList;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
 
@@ -20,23 +21,23 @@ namespace WebStore.Controllers
 
         public IActionResult Shop(int? sectionId, int? brandId)
         {
-            var products = _productData.GetProducts(new ProductFilter { BrandId = brandId, SectionId = sectionId });
+            IEnumerable<Product> products = _productData.GetProducts(new ProductFilter { BrandId = brandId, SectionId = sectionId });
 
-            var model = new CatalogViewModel
+            CatalogViewModel catalogViewModel = new CatalogViewModel
             {
                 BrandId = brandId,
                 SectionId = sectionId,
-                Products = products.Select(p => new ProductViewModel
+                Products = products.Select(product => new ProductViewModel
                 {
-                    Id = p.Id,
-                    ImageUrl = p.ImageUrl,
-                    Name = p.Name,
-                    Order = p.Order,
-                    Price = p.Price
+                    Id = product.Id,
+                    ImageUrl = product.ImageUrl,
+                    Name = product.Name,
+                    Order = product.Order,
+                    Price = product.Price
                 }).OrderBy(p => p.Order).ToList()
             };
 
-            return View(model);
+            return View(catalogViewModel);
         }
 
         public IActionResult ProductDetails()

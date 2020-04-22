@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebStore.Domain.Entities;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Models;
 
@@ -18,44 +19,46 @@ namespace WebStore.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return View(GetSections());
+            List<SectionViewModel> sections = GetSections();
+            return View(sections);
         }
         private List<SectionViewModel> GetSections()
         {
-            var categories = _productData.GetSections();
-            var parentCategories = categories.Where(p => p.ParentId == null).ToArray();
-            var parentSections = new List<SectionViewModel>();
-            foreach (var parentCategory in parentCategories)
+            IEnumerable<Section> allSections = _productData.GetSections();
+            Section[] parentSections = allSections.Where(p => p.ParentId == null).ToArray();
+            List<SectionViewModel> parentSectionsList = new List<SectionViewModel>();
+
+            foreach (Section parent in parentSections)
             {
-                parentSections.Add(new SectionViewModel
+                parentSectionsList.Add(new SectionViewModel
                 {
-                    Id = parentCategory.Id,
-                    Name = parentCategory.Name,
-                    Order = parentCategory.Order,
+                    Id = parent.Id,
+                    Name = parent.Name,
+                    Order = parent.Order,
                     ParentSection = null
                 });
             }
-            foreach (var sectionViewModel in parentSections)
+
+            foreach (SectionViewModel parent in parentSectionsList)
             {
-                var childCategories = categories
-                    .Where(c => c.ParentId == sectionViewModel.Id);
-                foreach (var childCategory in childCategories)
+                IEnumerable<Section> childSections = allSections.Where(c => c.ParentId == parent.Id);
+
+                foreach (Section child in childSections)
                 {
-                    sectionViewModel.ChildSections.Add(new SectionViewModel
+                    parent.ChildSections.Add(new SectionViewModel
                     {
-                        Id = childCategory.Id,
-                        Name = childCategory.Name,
-                        Order = childCategory.Order,
-                        ParentSection = sectionViewModel
+                        Id = child.Id,
+                        Name = child.Name,
+                        Order = child.Order,
+                        ParentSection = parent
                     });
                 }
-                sectionViewModel.ChildSections = sectionViewModel
-                    .ChildSections
-                    .OrderBy(c => c.Order)
-                    .ToList();
+
+                parent.ChildSections = parent.ChildSections.OrderBy(c => c.Order).ToList();
             }
-            parentSections = parentSections.OrderBy(c => c.Order).ToList();
-            return parentSections;
+
+            parentSectionsList = parentSectionsList.OrderBy(c => c.Order).ToList();
+            return parentSectionsList;
         }
     }
 
