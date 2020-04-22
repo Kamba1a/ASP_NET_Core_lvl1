@@ -5,8 +5,10 @@
     Layout = null;
 }
 
-<h1>Информация о книге</h1>
-
+@Html.ActionLink("<<< Вернуться к списку книг", "Books")
+<br>
+<h3>Информация о книге</h3>
+<br>
 <table>
     <tr>
         <td>ID</td>
@@ -30,5 +32,3 @@
     </tr>
 </table>
 <br>
-<br>
-@Html.ActionLink("<<< Вернуться к списку книг","Books")
