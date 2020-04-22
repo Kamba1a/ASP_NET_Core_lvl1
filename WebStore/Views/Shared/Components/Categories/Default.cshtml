@@ -10,7 +10,7 @@
         {
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4 class="panel-title"><a href="#">@category.Name</a></h4>
+                    <h4 class="panel-title"><a asp-controller="Catalog" asp-action="Shop" asp-route-categoryId="@category.Id">@category.Name</a></h4>
                 </div>
             </div>
         }
@@ -30,7 +30,7 @@
                         <ul>
                             @foreach (CategoryViewModel childCategory in category.childCategories)
                             {
-                                <li><a href="#">@childCategory.Name</a></li>
+                                <li><a asp-controller="Catalog" asp-action="Shop" asp-route-categoryId="@childCategory.Id">@childCategory.Name</a></li>
                             }
                         </ul>
                     </div>
