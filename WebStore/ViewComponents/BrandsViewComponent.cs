@@ -32,10 +32,22 @@ namespace WebStore.ViewComponents
                 Id = brand.Id,
                 Name = brand.Name,
                 Order = brand.Order,
-                ProductsCount = 0
+                ProductsCount = GetProductsCount(brand.Id)
             }).OrderBy(b => b.Order).ToList();
 
             return allBrandsList;
+        }
+
+        private int GetProductsCount(int brandId)
+        {
+            int productCount = 0;
+
+            foreach (Product product in _productData.GetProducts(new Domain.ProductFilter()))
+            {
+                if (product.BrandId == brandId) productCount = productCount + 1;
+            }
+
+            return productCount;
         }
     }
 }
