@@ -31,6 +31,8 @@ namespace WebStore
 
             services.AddSingleton(typeof(IitemService<EmployeeViewModel>), typeof(InMemoryEmployeesService));
             services.AddSingleton(typeof(IitemService<BookViewModel>), typeof(InMemoryBooksService));
+
+            services.AddSingleton<ICatalogData, InMemoryCatalogData>();
         }
 
 
