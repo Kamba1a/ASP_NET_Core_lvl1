@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebStore.Infrastructure.Interfaces;
@@ -15,6 +17,12 @@ namespace WebStore
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration; //дл€ обращени€ к appsettings.json
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -23,6 +31,9 @@ namespace WebStore
 
             services.AddMvc();
             //(options => options.Filters.Add(new Example_SimpleActionFilter())) дл€ добавлени€ фильтра ко всем методам всех контроллеров
+
+            //строка подключени€ SQL:
+            services.AddDbContext<DAL.WebStoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
 
             //–азрешение зависимости:
             //services.AddSingleton<IService, InMemoryService>(); врем€ жизни сервиса = времени жизни запущенной программы 
