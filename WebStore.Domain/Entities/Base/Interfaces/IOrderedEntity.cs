@@ -4,10 +4,10 @@ using System.Text;
 
 namespace WebStore.Domain.Entities.Base.Interfaces
 {
-    /// <summary>Entity with order</summary>
+    /// <summary>Сущность имеющая номер для сортировки по порядку</summary>
     public interface IOrderedEntity
     {
-        /// <summary>Порядок</summary>
+        /// <summary>Номер для сортировки по порядку</summary>
         int Order { get; set; }
     }
 }
