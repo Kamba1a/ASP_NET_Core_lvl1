@@ -24,7 +24,7 @@ namespace WebStore.Domain.Entities
         /// <summary>
         /// ID бренда, к которому относится товар
         /// </summary>
-        public int? BrandId { get; set; }
+        public int BrandId { get; set; }
 
         /// <summary>
         /// Ссылка на картинку
