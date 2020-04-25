@@ -32,8 +32,13 @@ namespace WebStore.ViewComponents
                 Id = brand.Id,
                 Name = brand.Name,
                 Order = brand.Order,
-                ProductsCount = GetProductsCount(brand.Id)
+                //ProductsCount = GetProductsCount(brand.Id) //так выдает ошибку "There is already an open DataReader associated with this Command which must be closed first"
             }).OrderBy(b => b.Order).ToList();
+
+            foreach(BrandViewModel brand in allBrandsList)
+            {
+                brand.ProductsCount = GetProductsCount(brand.Id);
+            }
 
             return allBrandsList;
         }
