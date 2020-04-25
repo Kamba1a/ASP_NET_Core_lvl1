@@ -19,7 +19,7 @@ namespace WebStore.DAL
         /// <param name="webStoreContext"></param>
         public static void Initialize(WebStoreContext webStoreContext)
         {
-            //проверяет, создана ли БД (если нет, то создает ее?)
+            //проверяет, создана ли БД (если нет, то создает ее? непонятно зачем, если нужно апдейтить через миграции, а не так)
             webStoreContext.Database.EnsureCreated();
 
             //Проверяет - если есть хоть один элемент в таблице, то ничего не делаем

@@ -10,22 +10,22 @@ namespace WebStore.Infrastructure.Interfaces
     /// <summary>
     /// Интерфейс для работы с товарами
     /// </summary>
-    public interface IProductData
+    public interface ICatalogData
     {
         /// <summary>
-        /// Список секций
+        /// Перечень секций
         /// </summary>
         /// <returns></returns>
         IEnumerable<Section> GetSections();
 
         /// <summary>
-        /// Список брендов
+        /// Перечень брендов
         /// </summary>
         /// <returns></returns>
         IEnumerable<Brand> GetBrands();
 
         /// <summary>
-        /// Список товаров
+        /// Перечень товаров
         /// </summary>
         /// <param name="filter">Фильтр товаров</param>
         /// <returns></returns>

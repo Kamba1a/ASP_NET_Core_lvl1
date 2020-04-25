@@ -8,14 +8,26 @@ using WebStore.Domain.Entities;
 
 namespace WebStore.DAL
 {
+    /// <summary>
+    /// Класс для доступа к таблицам БД
+    /// </summary>
     public class WebStoreContext: DbContext
     {
         public WebStoreContext(DbContextOptions options) : base(options)
         {
         }
-        //для создания таблиц
+
+        /// <summary>
+        /// Таблица БД с перечнем товаров
+        /// </summary>
         public DbSet<Product> Products { get; set; }
+        /// <summary>
+        /// Таблица БД с перечнем брендов
+        /// </summary>
         public DbSet<Brand> Brands { get; set; }
+        /// <summary>
+        /// Таблица БД с перечнем категорий
+        /// </summary>
         public DbSet<Section> Sections { get; set; }
     }
 }

@@ -40,9 +40,9 @@ namespace WebStore
             //services.AddScoped(); равно времени жизни http-запроса (до обновления/закрытия страницы)
             //services.AddTransient(); - обновляется при каждом запросе
 
-            services.AddSingleton(typeof(IitemService<EmployeeViewModel>), typeof(InMemoryEmployeesService));
-            services.AddSingleton(typeof(IitemService<BookViewModel>), typeof(InMemoryBooksService));
-            services.AddSingleton<IProductData, InMemoryProductData>();
+            services.AddSingleton(typeof(IitemData<EmployeeViewModel>), typeof(InMemoryEmployeesData));
+            services.AddSingleton(typeof(IitemData<BookViewModel>), typeof(InMemoryBooksData));
+            services.AddSingleton<ICatalogData, InMemoryCatalogData>();
         }
 
 

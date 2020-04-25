@@ -8,13 +8,13 @@ using WebStore.Infrastructure.Interfaces;
 
 namespace WebStore.Infrastructure.Services
 {
-    public class InMemoryProductData : IProductData
+    public class InMemoryCatalogData : ICatalogData
     {
         List<Section> _sections;
         List<Brand> _brands;
         List<Product> _products;
 
-        public InMemoryProductData()
+        public InMemoryCatalogData()
         {
             _sections = new List<Section>()
             {
@@ -413,7 +413,7 @@ namespace WebStore.Infrastructure.Services
 
         public IEnumerable<Product> GetProducts(ProductFilter filter)
         {
-            var products = _products;
+            List<Product> products = _products;
             if (filter?.SectionId != null)
                 products = products.Where(p => p.SectionId == filter.SectionId).ToList();
             if (filter?.BrandId != null)

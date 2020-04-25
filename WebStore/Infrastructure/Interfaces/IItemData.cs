@@ -6,7 +6,7 @@ using WebStore.Models;
 
 namespace WebStore.Infrastructure.Interfaces
 {
-    public interface IitemService<T>
+    public interface IitemData<T>
     {
         /// <summary>
         /// Возвращает список сотрудников
