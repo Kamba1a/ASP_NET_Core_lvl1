@@ -42,7 +42,9 @@ namespace WebStore
 
             services.AddSingleton(typeof(IitemData<EmployeeViewModel>), typeof(InMemoryEmployeesData));
             services.AddSingleton(typeof(IitemData<BookViewModel>), typeof(InMemoryBooksData));
-            services.AddSingleton<ICatalogData, InMemoryCatalogData>();
+
+            //services.AddSingleton<ICatalogData, InMemoryCatalogData>(); //было до подключения БД
+            services.AddScoped<ICatalogData, SqlCatalogData>(); //после подключения БД
         }
 
 
