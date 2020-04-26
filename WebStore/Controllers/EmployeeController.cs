@@ -23,15 +23,15 @@ namespace WebStore.Controllers
             _employees = employees;
         }
 
-        //[Route("all")] //пример маршрутизации атрибутами (// GET: users/all)
         //GET: /<controller>/employees
+        //[Route("all")] //пример маршрутизации атрибутами (// GET: users/all)
         public IActionResult Employees()
         {
             return View(_employees.GetAll());
         }
 
-        //[Route("{id}")] //пример маршрутизации атрибутами (// GET: /users/{id})
         //GET: /<controller>/employees/details/{id}
+        //[Route("{id}")] //пример маршрутизации атрибутами (// GET: /users/{id})
         public IActionResult Details(int id)
         {
             return View(_employees.GetById(id));
@@ -46,10 +46,14 @@ namespace WebStore.Controllers
             return View(employee);
         }
 
-        //POST: /<controller>/employees/edit/
         [HttpPost]
         public IActionResult Edit(EmployeeViewModel _employee)
         {
+            //помимо использования атрибутов в модели, можно добавить проверку валидации в экшн-методе контроллера:
+            //if (_employee.Age < 18 || _employee.Age > 99) ModelState.AddModelError("Age", "Некорректно указан возраст");
+
+            if (!ModelState.IsValid) return View(_employee); //валидация
+
             EmployeeViewModel employee = _employees.GetById(_employee.Id);
             if (employee == null) _employees.AddNew(_employee);
             else

@@ -11,25 +11,26 @@
     <div class="row">
         <div class="col-md-4">
             <form asp-action="Edit" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div> @*также можно добавить сообщение отдельно под каждым полем, используя asp-validation-for*@
                 <div class="form-group">
-                    <label class="control-label">Имя</label>
-                    <input class="form-control" asp-for="FirstName"/>
+                    <label class="control-label" asp-for="FirstName"></label>
+                    <input class="form-control" asp-for="FirstName" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Фамилия</label>
-                    <input class="form-control" asp-for="LastName"/>
+                    <label class="control-label" asp-for="LastName"></label>
+                    <input class="form-control" asp-for="LastName" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Отчество</label>
-                    <input class="form-control" asp-for="Patronymic"/>
+                    <label class="control-label" asp-for="Patronymic"></label>
+                    <input class="form-control" asp-for="Patronymic" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Возраст</label>
-                    <input class="form-control" asp-for="Age"/>
+                    <label class="control-label" asp-for="Age"></label>
+                    <input class="form-control" asp-for="Age" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Должность</label>
-                    <input class="form-control" asp-for="Position"/>
+                    <label class="control-label" asp-for="Position"></label>
+                    <input class="form-control" asp-for="Position" />
                 </div>
                 <div class="form-group">
                     <input class="btn btn-default" type="submit" value="Сохранить" />
