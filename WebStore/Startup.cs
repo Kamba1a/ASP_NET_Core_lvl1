@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebStore.DAL;
+using WebStore.Domain;
 using WebStore.Infrastructure.Interfaces;
 using WebStore.Infrastructure.Services;
 using WebStore.Models;
@@ -35,6 +38,46 @@ namespace WebStore
             //строка подключени€ SQL:
             services.AddDbContext<DAL.WebStoreContext>(options => options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection")));
 
+
+        //Authentication and Authorization//
+            //добавление роли
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<WebStoreContext>()
+                .AddDefaultTokenProviders();
+
+            //настройка требований к паролю, логину итд (необ€зательно)
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings
+                options.User.RequireUniqueEmail = true;
+            });
+
+            //настройка куки и путей к страницам, относ€щимс€ к авторизации (необ€зательно)
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                //options.Cookie.HttpOnly = true;
+                //options.Cookie.Expiration = TimeSpan.FromDays(150);
+                options.LoginPath = "/Account/Login"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
+                options.LogoutPath = "/Account/Logout"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
+                options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                options.SlidingExpiration = true;
+            });
+
+        //Dependency//
             //–азрешение зависимости:
             //services.AddSingleton<IService, InMemoryService>(); врем€ жизни сервиса = времени жизни запущенной программы 
             //services.AddScoped(); равно времени жизни http-запроса (до обновлени€/закрыти€ страницы)
@@ -61,7 +104,13 @@ namespace WebStore
             //подключение статических ресурсов
             app.UseStaticFiles();
 
+            //подключаем аутентификацию (именно после подключени€ статических файлов дл€ возможности анонимного доступа к ним)
+            app.UseAuthentication();
+
             app.UseRouting();
+
+            //подключаем авторизацию (после UseRouting и до UseEndpoints)
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
