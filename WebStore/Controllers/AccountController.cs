@@ -60,8 +60,8 @@ namespace WebStore.Controllers
                 foreach (var error in identityResult.Errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
-                    return View(model); //вывести ошибки
                 }
+                return View(model); //вывести ошибки
             }
 
             await _signInManager.SignInAsync(user, false); //логин пользователя после регистрации (без пароля)
@@ -69,11 +69,7 @@ namespace WebStore.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //public IActionResult AccessDenied()
-        //{
-        //    return 0;
-        //}
-
+        [HttpPost, ValidateAntiForgeryToken] //метод post т.к. ValidateAntiForgeryToken не работает с get ?
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
