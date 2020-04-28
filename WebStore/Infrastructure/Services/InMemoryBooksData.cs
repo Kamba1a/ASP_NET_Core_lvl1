@@ -7,11 +7,11 @@ using WebStore.Models;
 
 namespace WebStore.Infrastructure.Services
 {
-    public class InMemoryBooksService: IitemService<BookViewModel>
+    public class InMemoryBooksData: IitemData<BookViewModel>
     {
         List<BookViewModel> _books;
 
-        public InMemoryBooksService()
+        public InMemoryBooksData()
         {
             _books = new List<BookViewModel>{
                 new BookViewModel{Id=1, Title="Все о нашей вселенной", Author="Иванов", PagesNumber=300, Year=2017},

@@ -1,22 +1,35 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using WebStore.Domain;
+using System.Text;
 using WebStore.Domain.Entities;
-using WebStore.Infrastructure.Interfaces;
 
-namespace WebStore.Infrastructure.Services
+namespace WebStore.DAL
 {
-    public class InMemoryProductData : IProductData
+    /// <summary>
+    /// Класс для наполнения таблиц в БД начальными данными
+    /// </summary>
+    public static class DbInitializer
     {
-        List<Section> _sections;
-        List<Brand> _brands;
-        List<Product> _products;
-
-        public InMemoryProductData()
+        /// <summary>
+        /// Наполняет таблицы БД начальными данными
+        /// </summary>
+        /// <param name="webStoreContext"></param>
+        public static void Initialize(WebStoreContext webStoreContext)
         {
-            _sections = new List<Section>()
+            //проверяет, создана ли БД (если нет, то создает ее? непонятно зачем, если нужно апдейтить через миграции, а не так)
+            webStoreContext.Database.EnsureCreated();
+
+            //Проверяет - если есть хоть один элемент в таблице, то ничего не делаем
+            if (webStoreContext.Products.Any())
+            {
+                return;
+            }
+
+            //просто список с данными, которыми хотим напонить таблицу в базе
+            List<Section> sections = new List<Section>()
             {
                 new Section()
                 {
@@ -230,7 +243,25 @@ namespace WebStore.Infrastructure.Services
                 }
             };
 
-            _brands = new List<Brand>()
+            //перенос данных в базу
+            using (IDbContextTransaction transaction = webStoreContext.Database.BeginTransaction())
+            {
+                //переносим данные из List в Context-таблицу
+                foreach (Section section in sections)
+                {
+                    webStoreContext.Sections.Add(section);
+                }
+
+                //следующие команды нужны для того, чтобы можно было сохранить в полях Id таблицы БД свои значения
+                webStoreContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Sections] ON"); //отключаем проверку внешних ключей
+                webStoreContext.SaveChanges(); //сохраняем изменения, сделанные в Context, в БД
+                webStoreContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Sections] OFF");
+
+                //сохраняем данные о проведенных изменениях?
+                transaction.Commit();
+            }
+
+            List<Brand> brands = new List<Brand>()
             {
                 new Brand()
                 {
@@ -275,8 +306,20 @@ namespace WebStore.Infrastructure.Services
                     Order = 6
                 },
             };
+            using (var transaction = webStoreContext.Database.BeginTransaction())
+            {
+                foreach (Brand brand in brands)
+                {
+                    webStoreContext.Brands.Add(brand);
+                }
 
-            _products = new List<Product>()
+                webStoreContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Brands] ON");
+                webStoreContext.SaveChanges();
+                webStoreContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Brands] OFF");
+                transaction.Commit();
+            }
+
+            List<Product> products = new List<Product>()
             {
                 new Product()
                 {
@@ -287,7 +330,7 @@ namespace WebStore.Infrastructure.Services
                     Order = 0,
                     SectionId = 2,
                     BrandId = 1
-                    },
+                },
                 new Product()
                 {
                     Id = 2,
@@ -397,28 +440,20 @@ namespace WebStore.Infrastructure.Services
                     Order = 11,
                     SectionId = 25,
                     BrandId = 3
+                },
+            };
+
+            using (var transaction = webStoreContext.Database.BeginTransaction())
+            {
+                foreach (Product product in products)
+                {
+                    webStoreContext.Products.Add(product);
                 }
-             };
-        }
-
-        public IEnumerable<Section> GetSections()
-        {
-            return _sections;
-        }
-
-        public IEnumerable<Brand> GetBrands()
-        {
-            return _brands;
-        }
-
-        public IEnumerable<Product> GetProducts(ProductFilter filter)
-        {
-            var products = _products;
-            if (filter?.SectionId != null)
-                products = products.Where(p => p.SectionId == filter.SectionId).ToList();
-            if (filter?.BrandId != null)
-                products = products.Where(p => p.BrandId == filter.BrandId).ToList();
-            return products;
+                webStoreContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] ON");
+                webStoreContext.SaveChanges();
+                webStoreContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] OFF");
+                transaction.Commit();
+            }
         }
     }
 }

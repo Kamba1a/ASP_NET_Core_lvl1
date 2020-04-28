@@ -11,11 +11,11 @@ namespace WebStore.ViewComponents
 {
     public class SectionsViewComponent : ViewComponent
     {
-        private readonly IProductData _productData;
+        private readonly ICatalogData _catalogData;
 
-        public SectionsViewComponent(IProductData productData)
+        public SectionsViewComponent(ICatalogData catalogData)
         {
-            _productData = productData;
+            _catalogData = catalogData;
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
@@ -24,7 +24,7 @@ namespace WebStore.ViewComponents
         }
         private List<SectionViewModel> GetSections()
         {
-            IEnumerable<Section> allSections = _productData.GetSections();
+            IEnumerable<Section> allSections = _catalogData.GetSections();
             Section[] parentSections = allSections.Where(p => p.ParentId == null).ToArray();
             List<SectionViewModel> parentSectionsList = new List<SectionViewModel>();
 

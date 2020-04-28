@@ -12,9 +12,9 @@ namespace WebStore.Controllers
 {
     public class BookController : Controller
     {
-        IitemService<BookViewModel> _books;
+        IitemData<BookViewModel> _books;
 
-        public BookController(IitemService<BookViewModel> books)
+        public BookController(IitemData<BookViewModel> books)
         {
             _books = books;
         }

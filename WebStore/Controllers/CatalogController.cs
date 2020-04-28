@@ -12,16 +12,16 @@ namespace WebStore.Controllers
 {
     public class CatalogController : Controller
     {
-        IProductData _productData;
+        ICatalogData _catalogData;
 
-        public CatalogController(IProductData productData)
+        public CatalogController(ICatalogData catalogData)
         {
-            _productData = productData;
+            _catalogData = catalogData;
         }
 
         public IActionResult Shop(int? sectionId, int? brandId)
         {
-            IEnumerable<Product> products = _productData.GetProducts(new ProductFilter { BrandId = brandId, SectionId = sectionId });
+            IEnumerable<Product> products = _catalogData.GetProducts(new ProductFilter { BrandId = brandId, SectionId = sectionId });
 
             CatalogViewModel catalogViewModel = new CatalogViewModel
             {

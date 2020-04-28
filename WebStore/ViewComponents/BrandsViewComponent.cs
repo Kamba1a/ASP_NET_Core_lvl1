@@ -11,11 +11,11 @@ namespace WebStore.ViewComponents
 {
     public class BrandsViewComponent : ViewComponent
     {
-        private readonly IProductData _productData;
+        private readonly ICatalogData _catalogData;
 
-        public BrandsViewComponent(IProductData productData)
+        public BrandsViewComponent(ICatalogData catalogData)
         {
-            _productData = productData;
+            _catalogData = catalogData;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -26,14 +26,19 @@ namespace WebStore.ViewComponents
 
         private List<BrandViewModel> GetBrands()
         {
-            IEnumerable<Brand> allBrands = _productData.GetBrands();
+            IEnumerable<Brand> allBrands = _catalogData.GetBrands();
             List<BrandViewModel> allBrandsList = allBrands.Select(brand => new BrandViewModel
             {
                 Id = brand.Id,
                 Name = brand.Name,
                 Order = brand.Order,
-                ProductsCount = GetProductsCount(brand.Id)
+                //ProductsCount = GetProductsCount(brand.Id) //так выдает ошибку "There is already an open DataReader associated with this Command which must be closed first"
             }).OrderBy(b => b.Order).ToList();
+
+            foreach(BrandViewModel brand in allBrandsList)
+            {
+                brand.ProductsCount = GetProductsCount(brand.Id);
+            }
 
             return allBrandsList;
         }
@@ -42,7 +47,7 @@ namespace WebStore.ViewComponents
         {
             int productCount = 0;
 
-            foreach (Product product in _productData.GetProducts(new Domain.ProductFilter()))
+            foreach (Product product in _catalogData.GetProducts(new Domain.ProductFilter()))
             {
                 if (product.BrandId == brandId) productCount = productCount + 1;
             }

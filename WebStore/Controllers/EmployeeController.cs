@@ -16,9 +16,9 @@ namespace WebStore.Controllers
     //[Route("users")] //пример маршрутизации атрибутами (путь будет не employee, а users)
     public class EmployeeController : Controller
     {
-        IitemService<EmployeeViewModel> _employees;
+        IitemData<EmployeeViewModel> _employees;
 
-        public EmployeeController(IitemService<EmployeeViewModel> employees)
+        public EmployeeController(IitemData<EmployeeViewModel> employees)
         {
             _employees = employees;
         }

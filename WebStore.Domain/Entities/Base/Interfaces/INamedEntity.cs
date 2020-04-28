@@ -5,7 +5,7 @@ using System.Text;
 namespace WebStore.Domain.Entities.Base.Interfaces
 {
     /// <inheritdoc />
-    /// <summary>Entity with name</summary>
+    /// <summary>Сущность имеющая наименование</summary>
     public interface INamedEntity : IBaseEntity
     {
         /// <summary>Наименование</summary>
