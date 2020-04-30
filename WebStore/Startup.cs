@@ -104,13 +104,12 @@ namespace WebStore
             //подключение статических ресурсов
             app.UseStaticFiles();
 
-            //подключаем аутентификацию (именно после подключения статических файлов для возможности анонимного доступа к ним)
-            app.UseAuthentication();
-
             app.UseRouting();
 
-            //подключаем авторизацию (после UseRouting и до UseEndpoints)
-            app.UseAuthorization();
+            //подключаем аутентификацию (после подключения статических файлов для возможности анонимного доступа к ним)
+            app.UseAuthentication();
+            //подключаем авторизацию (именно после UseRouting и до UseEndpoints)
+            app.UseAuthorization(); //нужно подключать только если используются атрибуты [Authorize]
 
             app.UseEndpoints(endpoints =>
             {

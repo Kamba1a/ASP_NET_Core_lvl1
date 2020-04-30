@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Infrastructure;
 using WebStore.Infrastructure.Interfaces;
@@ -14,6 +15,7 @@ namespace WebStore.Controllers
 {
     //[Example_SimpleActionFilter] //через атрибут можно подключить фильтр к целому контроллеру или отдельным экшн-методам
     //[Route("users")] //пример маршрутизации атрибутами (путь будет не employee, а users)
+    [Authorize] //для всех методов контроллера требуется авторизация, если в методе не указано [AllowAnonymous]
     public class EmployeeController : Controller
     {
         IitemData<EmployeeViewModel> _employees;
@@ -25,6 +27,7 @@ namespace WebStore.Controllers
 
         //GET: /<controller>/employees
         //[Route("all")] //пример маршрутизации атрибутами (// GET: users/all)
+        [AllowAnonymous] //просматривать список могут все
         public IActionResult Employees()
         {
             return View(_employees.GetAll());
@@ -32,12 +35,14 @@ namespace WebStore.Controllers
 
         //GET: /<controller>/employees/details/{id}
         //[Route("{id}")] //пример маршрутизации атрибутами (// GET: /users/{id})
+        [Authorize(Roles = "Admins, Users")] //для просмотра деталей о работнике нужна роль админа или юзера
         public IActionResult Details(int id)
         {
             return View(_employees.GetById(id));
         }
 
         //GET: /<controller>/employees/edit/{id?}
+        [Authorize(Roles ="Admins")] //для редактирования работника требуется роль админа
         public IActionResult Edit(int? id)
         {
             if (!id.HasValue) return View(new EmployeeViewModel());
@@ -46,7 +51,7 @@ namespace WebStore.Controllers
             return View(employee);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admins")]
         public IActionResult Edit(EmployeeViewModel _employee)
         {
             //помимо использования атрибутов в модели, можно добавить проверку валидации в экшн-методе контроллера:
@@ -68,6 +73,7 @@ namespace WebStore.Controllers
             return RedirectToAction("Employees");
         }
 
+        [Authorize(Roles = "Admins")]
         public IActionResult Delete(int id)
         {
             _employees.Delete(id);
