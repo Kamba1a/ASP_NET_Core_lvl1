@@ -1,9 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
+using WebStore.Domain;
 using WebStore.Domain.Entities;
 
 namespace WebStore.DAL
@@ -453,6 +457,61 @@ namespace WebStore.DAL
                 webStoreContext.SaveChanges();
                 webStoreContext.Database.ExecuteSqlCommand("SET IDENTITY_INSERT [dbo].[Products] OFF");
                 transaction.Commit();
+            }
+        }
+
+        /// <summary>
+        /// Заносит в БД роли пользователей
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        public static void InitializeUsers(IServiceProvider serviceProvider)
+        {
+            RoleManager<IdentityRole> roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            //добавляем роли
+            EnsureRole(roleManager, "Users");
+            EnsureRole(roleManager, "Admins");
+
+            //добавляем пользователя администратора
+            EnsureRoleToUser(serviceProvider, "Admin", "Admins", "admin123");
+        }
+
+        /// <summary>
+        /// Добавляет в БД роль, если ее нет
+        /// </summary>
+        /// <param name="roleManager"></param>
+        /// <param name="roleName"></param>
+        private static void EnsureRole(RoleManager<IdentityRole> roleManager, string roleName)
+        {
+            if (!roleManager.RoleExistsAsync(roleName).Result) //если проверка на наличие роли в БД не подтвердилась
+            {
+                roleManager.CreateAsync(new IdentityRole(roleName)).Wait(); //то добавляем роль
+            }
+        }
+
+        /// <summary>
+        /// Добавляет в БД пользователя с указанной ролью, если такого нет 
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        /// <param name="userName"></param>
+        /// <param name="roleName"></param>
+        /// <param name="password"></param>
+        private static void EnsureRoleToUser(IServiceProvider serviceProvider, string userName, string roleName, string password)
+        {
+            UserManager<User> userManager = serviceProvider.GetService<UserManager<User>>();
+            IUserStore<User> userStore = serviceProvider.GetService<IUserStore<User>>();
+
+            if (userStore.FindByNameAsync(userName, CancellationToken.None).Result != null) return; // если пользователь с таким именем уже есть, то выходим
+
+            User user = new User // создаем пользователя под указанным именем
+            {
+                UserName = userName,
+                Email = $"{userName}@domain.com"
+            };
+
+            if (userManager.CreateAsync(user, password).Result.Succeeded) // добавляем пользователя в БД
+            {
+                userManager.AddToRoleAsync(user, roleName).Wait(); // если пользователь успешно добавлен, то даем ему указанную роль
             }
         }
     }

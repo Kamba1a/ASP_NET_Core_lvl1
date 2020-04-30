@@ -29,7 +29,9 @@ namespace WebStore
                 try
                 {
                     WebStoreContext webStoreContext = serviceProvider.GetRequiredService<WebStoreContext>();
-                    DbInitializer.Initialize(webStoreContext); //вся конструкция только ради этой команды
+                    //вся конструкция нужна ради команд из DbInitializer:
+                    DbInitializer.Initialize(webStoreContext);
+                    DbInitializer.InitializeUsers(serviceProvider);
                 }
                 catch (Exception ex)
                 {

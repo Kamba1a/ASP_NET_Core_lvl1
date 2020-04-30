@@ -65,6 +65,7 @@ namespace WebStore.Controllers
             }
 
             await _signInManager.SignInAsync(user, false); //логин пользователя после регистрации (без пароля)
+            await _userManager.AddToRoleAsync(user, "Users"); //добавляем зарегистрировавшегося к общей группе пользователей
 
             return RedirectToAction("Index", "Home");
         }
