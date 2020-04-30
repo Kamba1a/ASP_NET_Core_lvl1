@@ -46,12 +46,6 @@ namespace WebStore.Controllers
             return View();
         }
 
-        // GET: /<controller>/Login
-        public IActionResult Login()
-        {
-            return View();
-        }
-
         // GET: /<controller>/NotFound404
         public IActionResult NotFound404()
         {
