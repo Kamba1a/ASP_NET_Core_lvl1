@@ -21,7 +21,7 @@ namespace WebStore.Controllers
 
         public IActionResult Shop(int? sectionId, int? brandId)
         {
-            IEnumerable<Product> products = _catalogData.GetProducts(new ProductFilter { BrandId = brandId, SectionId = sectionId });
+            IQueryable<Product> products = _catalogData.GetProducts(new ProductFilter { BrandId = brandId, SectionId = sectionId });
 
             CatalogViewModel catalogViewModel = new CatalogViewModel
             {
@@ -40,9 +40,20 @@ namespace WebStore.Controllers
             return View(catalogViewModel);
         }
 
-        public IActionResult ProductDetails()
+        public IActionResult ProductDetails(int productId)
         {
-            return View();
+            Product product = _catalogData.GetProductById(productId);
+            if (product == null) return NotFound();
+
+            ProductViewModel productViewModel = new ProductViewModel()
+            {
+                Name = product.Name,
+                Price = product.Price,
+                ImageUrl = product.ImageUrl,
+                BrandName = _catalogData.GetBrandById(product.BrandId).Name ?? String.Empty
+            };
+
+            return View(productViewModel);
         }
     }
 }
