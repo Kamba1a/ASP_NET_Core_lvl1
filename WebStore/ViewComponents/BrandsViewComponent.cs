@@ -26,7 +26,7 @@ namespace WebStore.ViewComponents
 
         private List<BrandViewModel> GetBrands()
         {
-            IEnumerable<Brand> allBrands = _catalogData.GetBrands();
+            IQueryable<Brand> allBrands = _catalogData.GetBrands();
             List<BrandViewModel> allBrandsList = allBrands.Select(brand => new BrandViewModel
             {
                 Id = brand.Id,
@@ -47,7 +47,7 @@ namespace WebStore.ViewComponents
         {
             int productCount = 0;
 
-            foreach (Product product in _catalogData.GetProducts(new Domain.ProductFilter()))
+            foreach (Product product in _catalogData.GetProducts())
             {
                 if (product.BrandId == brandId) productCount = productCount + 1;
             }

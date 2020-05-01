@@ -24,7 +24,7 @@ namespace WebStore.ViewComponents
         }
         private List<SectionViewModel> GetSections()
         {
-            IEnumerable<Section> allSections = _catalogData.GetSections();
+            IQueryable<Section> allSections = _catalogData.GetSections();
             Section[] parentSections = allSections.Where(p => p.ParentId == null).ToArray();
             List<SectionViewModel> parentSectionsList = new List<SectionViewModel>();
 
