@@ -43,7 +43,8 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            if (Url.IsLocalUrl(model.ReturnUrl)) return Redirect(model.ReturnUrl);
+            if (Url.IsLocalUrl(model.ReturnUrl)) return Redirect(model.ReturnUrl); //ReturnUrl всегда null, т.к. в представлении нигде не прописано присваивание
+
             return RedirectToAction("Index", "Home");
         }
 
