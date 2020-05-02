@@ -87,7 +87,10 @@ namespace WebStore
             services.AddSingleton(typeof(IitemData<BookViewModel>), typeof(InMemoryBooksData));
 
             //services.AddSingleton<ICatalogData, InMemoryCatalogData>(); //было до подключения БД
-            services.AddScoped<ICatalogData, SqlCatalogData>(); //после подключения БД
+            services.AddScoped<ICatalogData, SqlCatalogData>(); //после подключения БД (и стало AddScoped)
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //для работы служебного класса HttpContextAccessor также нужно прописывать зависимость
+            services.AddScoped<ICartService, CookieCartService>(); //корзина - AddScoped!
         }
 
 

@@ -18,5 +18,9 @@ namespace WebStore.Domain
         /// Бренд товара
         /// </summary>
         public int? BrandId { get; set; }
+        /// <summary>
+        /// Перечень ID товаров
+        /// </summary>
+        public List<int> ProductsIdList { get; set; }
     }
 }
