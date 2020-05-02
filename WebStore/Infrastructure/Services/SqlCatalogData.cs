@@ -34,6 +34,8 @@ namespace WebStore.Infrastructure.Services
                     products = products.Where(product => product.SectionId.Equals(filter.SectionId));
                 if (filter.BrandId.HasValue)
                     products = products.Where(product => product.BrandId == filter.BrandId);
+                if (filter.ProductsIdList != null)
+                    products = products.Where(product => filter.ProductsIdList.Contains(product.Id));
             }
 
             return products;
