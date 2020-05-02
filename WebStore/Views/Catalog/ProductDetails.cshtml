@@ -33,15 +33,14 @@
                             <span>US $@Model.Price</span>                                               @*[OK]цена товара*@
                             <label>Quantity:</label>
                             <input type="text" value="3" />                                             @*сколько товара хотим добавить в корзину*@
-                            <button type="button" class="btn btn-fefault cart">
-                                @*кнопка товар в корзину*@
-                                <i class="fa fa-shopping-cart"></i>
-                                Add to cart
-                            </button>
+                        <button asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@Model.Id" asp-route-returnUrl="@Context.Request.Path" class="btn btn-fefault cart">
+                            <i class="fa fa-shopping-cart"></i>
+                            Add to cart                                                                 @*[НЕ РАБОТАЕТ]кнопка товар в корзину*@
+                        </button>
                         </span>
                             <p><b>Availability:</b> In Stock</p>                                        @*доступность товара*@
                             <p><b>Condition:</b> New</p>                                                @*состояние товара*@
-                            <p><b>Brand:</b> @Model.BrandName</p>                                      @*[OK]бренд товара*@
+                            <p><b>Brand:</b> @Model.BrandName</p>                                       @*[OK]бренд товара*@
                             <a href=""><img src="~/images/product-details/share.png" class="share img-responsive" alt="" /></a>
                         </div><!--/product-information-->
                     </div>
