@@ -16,19 +16,33 @@ namespace WebStore.Infrastructure.Interfaces
         /// Перечень секций
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Section> GetSections();
+        IQueryable<Section> GetSections();
 
         /// <summary>
         /// Перечень брендов
         /// </summary>
         /// <returns></returns>
-        IEnumerable<Brand> GetBrands();
+        IQueryable<Brand> GetBrands();
 
         /// <summary>
         /// Перечень товаров
         /// </summary>
         /// <param name="filter">Фильтр товаров</param>
         /// <returns></returns>
-        IEnumerable<Product> GetProducts(ProductFilter filter);
+        IQueryable<Product> GetProducts(ProductFilter filter=null);
+
+        /// <summary>
+        /// Товар по ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Product GetProductById(int id);
+
+        /// <summary>
+        /// Бренд по ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Brand GetBrandById(int id);
     }
 }

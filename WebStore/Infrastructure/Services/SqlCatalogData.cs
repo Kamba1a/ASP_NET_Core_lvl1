@@ -18,26 +18,50 @@ namespace WebStore.Infrastructure.Services
             _webStoreContext = webStoreContext;
         }
 
-        public IEnumerable<Brand> GetBrands()
+
+        public IQueryable<Brand> GetBrands()
         {
             return _webStoreContext.Brands;
         }
 
-        public IEnumerable<Product> GetProducts(ProductFilter filter)
+        public IQueryable<Product> GetProducts(ProductFilter filter=null)
         {
-            List<Product> products = _webStoreContext.Products.ToList();
+            IQueryable<Product> products = _webStoreContext.Products;
 
-            if (filter.SectionId.HasValue)
-                products = products.Where(product => product.SectionId.Equals(filter.SectionId)).ToList();
-            if (filter.BrandId.HasValue)
-                products = products.Where(product => product.BrandId == filter.BrandId).ToList();
+            if (filter != null)
+            {
+                if (filter.SectionId.HasValue)
+                    products = products.Where(product => product.SectionId.Equals(filter.SectionId));
+                if (filter.BrandId.HasValue)
+                    products = products.Where(product => product.BrandId == filter.BrandId);
+                if (filter.ProductsIdList != null)
+                    products = products.Where(product => filter.ProductsIdList.Contains(product.Id));
+            }
 
             return products;
         }
 
-        public IEnumerable<Section> GetSections()
+        public IQueryable<Section> GetSections()
         {
             return _webStoreContext.Sections;
+        }
+
+        public Product GetProductById(int id)
+        {
+            return GetProducts().FirstOrDefault(product => product.Id==id);
+
+            //вариант из методички, который сразу подсасывает модель бренда в товаре (.Include) и можно обойтись без доп.метода GetBrandById (но только если входной тип - DbSet)
+            //return _webStoreContext
+            //           .Products
+            //           .Include(p => p.Brand)
+            //           .Include(p => Section)
+            //           .FirstOrDefault(p => p.Id == id);
+
+        }
+
+        public Brand GetBrandById(int id)
+        {
+            return GetBrands().FirstOrDefault(brand => brand.Id==id);
         }
     }
 }

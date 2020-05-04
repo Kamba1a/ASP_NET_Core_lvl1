@@ -43,7 +43,8 @@ namespace WebStore.Controllers
                 return View(model);
             }
 
-            if (Url.IsLocalUrl(model.ReturnUrl)) return Redirect(model.ReturnUrl);
+            if (Url.IsLocalUrl(model.ReturnUrl)) return Redirect(model.ReturnUrl); //ReturnUrl всегда null, т.к. в представлении нигде не прописано присваивание
+
             return RedirectToAction("Index", "Home");
         }
 
@@ -65,6 +66,7 @@ namespace WebStore.Controllers
             }
 
             await _signInManager.SignInAsync(user, false); //логин пользователя после регистрации (без пароля)
+            await _userManager.AddToRoleAsync(user, "Users"); //добавляем зарегистрировавшегося к общей группе пользователей
 
             return RedirectToAction("Index", "Home");
         }

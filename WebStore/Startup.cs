@@ -87,7 +87,10 @@ namespace WebStore
             services.AddSingleton(typeof(IitemData<BookViewModel>), typeof(InMemoryBooksData));
 
             //services.AddSingleton<ICatalogData, InMemoryCatalogData>(); //было до подключения БД
-            services.AddScoped<ICatalogData, SqlCatalogData>(); //после подключения БД
+            services.AddScoped<ICatalogData, SqlCatalogData>(); //после подключения БД (и стало AddScoped)
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //для работы служебного класса HttpContextAccessor также нужно прописывать зависимость
+            services.AddScoped<ICartService, CookieCartService>(); //корзина - AddScoped!
         }
 
 
@@ -104,13 +107,12 @@ namespace WebStore
             //подключение статических ресурсов
             app.UseStaticFiles();
 
-            //подключаем аутентификацию (именно после подключения статических файлов для возможности анонимного доступа к ним)
-            app.UseAuthentication();
-
             app.UseRouting();
 
-            //подключаем авторизацию (после UseRouting и до UseEndpoints)
-            app.UseAuthorization();
+            //подключаем аутентификацию (после подключения статических файлов для возможности анонимного доступа к ним)
+            app.UseAuthentication();
+            //подключаем авторизацию (именно после UseRouting и до UseEndpoints)
+            app.UseAuthorization(); //нужно подключать только если используются атрибуты [Authorize]
 
             app.UseEndpoints(endpoints =>
             {
