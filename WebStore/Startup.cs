@@ -116,6 +116,9 @@ namespace WebStore
 
             app.UseEndpoints(endpoints =>
             {
+                //области
+                endpoints.MapControllerRoute("areas", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 //контроллер по-умолчанию (имя контроллера/имя метода/действие)
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{Id?}");
 
