@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebStore.Domain;
@@ -13,15 +14,24 @@ namespace WebStore.Controllers
     {
         UserManager<User> _userManager;
         SignInManager<User> _signInManager;
+
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager; //позволяет аутентифицировать пользователя и устанавливать или удалять его куки
         }
 
-        public IActionResult Login()
+        //public IActionResult Login(string returnUrl)
+        //{
+        //    return View(new LoginUserViewModel() { ReturnUrl = returnUrl});
+        //}
+
+        public IActionResult Login(string pathUrl, string queryString)
         {
-            return View(new LoginUserViewModel());
+            //string returnUrl = HttpContext.Request.Headers["Referer"].ToString(); //получает абсолютный адрес, с которого пользователь перешел на страницу логина (вместе с get-запросом)
+            
+            string returnUrl = pathUrl + queryString; //релятивная ссылка + get-запрос(если есть)
+            return View(new LoginUserViewModel() { ReturnUrl = returnUrl}); // передаем модель в представление со ссылкой куда вернуться
         }
 
         public IActionResult Registration()
@@ -42,8 +52,10 @@ namespace WebStore.Controllers
                 ModelState.AddModelError("","Ошибка входа");
                 return View(model);
             }
-
-            if (Url.IsLocalUrl(model.ReturnUrl)) return Redirect(model.ReturnUrl); //ReturnUrl всегда null, т.к. в представлении нигде не прописано присваивание
+            if (Url.IsLocalUrl(model.ReturnUrl)) return Redirect(model.ReturnUrl); //проверка на то, что ReturnUrl является ссылкой с нашего сайта
+                                                                                   //кажется, немного бесполезной проверкой, т.к. абсолютные пути через нее проверять смысла нет (все false),
+                                                                                   //поэтому выше используются только методы для получения локальных ссылок, что делает эту проверку бесполезной
+                                                                                   //(т.е. даже если перейти с другого сайта, ссылка будет вида "/" и все-равно приведет на главную нашего сайта)
 
             return RedirectToAction("Index", "Home");
         }
@@ -61,8 +73,8 @@ namespace WebStore.Controllers
                 foreach (var error in identityResult.Errors)
                 {
                     ModelState.AddModelError(error.Code, error.Description);
+                    return View(model); //выводит первую ошибку
                 }
-                return View(model); //вывести ошибки
             }
 
             await _signInManager.SignInAsync(user, false); //логин пользователя после регистрации (без пароля)

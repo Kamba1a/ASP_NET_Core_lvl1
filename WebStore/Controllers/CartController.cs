@@ -45,5 +45,12 @@ namespace WebStore.Controllers
             _cartService.DecrementProductQuantity(productId);
             return RedirectToAction("Cart");
         }
+
+        [HttpPost]
+        public IActionResult AddToCartFromProductDetails(int productId, int quantity)
+        {
+            _cartService.AddToCart(productId); //потом заменить на отдельный метод, который обрабатывает quantity
+            return RedirectToAction("ProductDetails","Catalog", new { productId});
+        }
     }
 }

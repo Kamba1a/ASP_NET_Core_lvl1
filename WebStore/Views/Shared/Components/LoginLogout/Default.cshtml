@@ -8,8 +8,8 @@
 }
 else
 {
-    <div class="btn-group pull-right">
-        <a asp-action="Login" asp-controller="Account" class="btn btn-default">Вход</a>
-        <a asp-action="Registration" asp-controller="Account" class="btn btn-default">Регистрация</a>
-    </div>
+<div class="btn-group pull-right">
+    <a asp-action="Login" asp-controller="Account"  asp-route-pathUrl="@Context.Request.Path" asp-route-queryString="@Context.Request.QueryString" class="btn btn-default">Вход</a>
+    <a asp-action="Registration" asp-controller="Account" class="btn btn-default">Регистрация</a>
+</div>
 }
