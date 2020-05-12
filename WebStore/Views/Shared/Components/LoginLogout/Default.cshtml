@@ -1,6 +1,6 @@
 ﻿@if (User.Identity.IsAuthenticated)
 {
-    <span>Hello, @User.Identity.Name</span>
+    <span>Hello, <a asp-controller="Profile" asp-action="Index">@User.Identity.Name</a></span>
     <form method="post" asp-controller="Account" asp-action="Logout" asp-antiforgery="true">
         <input type="submit" value="Exit" class="btn btn-default" />
     </form>

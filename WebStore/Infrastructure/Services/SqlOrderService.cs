@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,12 @@ namespace WebStore.Infrastructure.Services
         {
             _userManager = userManager;
             _webStoreContext = webStoreContext;
-    }
+        }
+
+        public IQueryable<Order> GetUserOrders(string username)
+        {
+            return _webStoreContext.Orders.Where(o => o.User.UserName == username);
+        }
 
         Order ISqlOrderService.CreateOrder(OrderDetailsViewModel model, CartViewModel cart, string UserName)
         {
