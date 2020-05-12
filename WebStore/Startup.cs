@@ -91,6 +91,7 @@ namespace WebStore
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //для работы служебного класса HttpContextAccessor также нужно прописывать зависимость
             services.AddScoped<ICartService, CookieCartService>(); //корзина - AddScoped!
+            services.AddScoped<ISqlOrderService, SqlOrderService>();
         }
 
 
