@@ -93,7 +93,9 @@ namespace WebStore.Infrastructure.Services
 
         public void RemoveAllProductsFromCart()
         {
-            Cart.Items.Clear(); //удаляем все товары из корзины (изменения сразу происходят через свойство)
+            Cart cart = Cart;
+            cart.Items.Clear();
+            Cart = cart;
         }
 
         public void RemoveProductFromCart(int productId)
@@ -110,24 +112,6 @@ namespace WebStore.Infrastructure.Services
 
         public CartViewModel TransformCartToViewModel()
         {
-            ////моя реализация(возможно плоха тем, что в цикле foreach идет множественное обращение к БД)
-            //Dictionary<ProductViewModel, int> cartItemsDic = new Dictionary<ProductViewModel, int>();
-            //foreach (CartItem cartItem in Cart.Items)
-            //{
-            //    Product product = _catalogData.GetProductById(cartItem.ProductId);
-            //    ProductViewModel productViewModel = new ProductViewModel()
-            //    {
-            //        Id = product.Id,
-            //        Name = product.Name,
-            //        Price = product.Price,
-            //        ImageUrl = product.ImageUrl
-            //    };
-            //    cartItemsDic.Add(productViewModel, cartItem.Quantity);
-            //}
-            //return new CartViewModel() { CartItems = cartItemsDic };
-
-
-            //реализация из методички
             List<ProductViewModel> products = _catalogData.GetProducts(new ProductFilter()      //сначала получаем список Product
             { ProductsIdList = Cart.Items.Select(cartItem => cartItem.ProductId).ToList() })    //(фильтр по списку ID товаров из корзины)
                     .Select(product => new ProductViewModel()                                   //сразу преобразовываем каждый Product в ProductViewModel
@@ -139,13 +123,31 @@ namespace WebStore.Infrastructure.Services
                         Price = product.Price,
                         BrandName = product.Brand != null ? product.Brand.Name : string.Empty
                     }).ToList();
-            CartViewModel cartViewModel = new CartViewModel
+
+            List<CartItemViewModel> cartItems = new List<CartItemViewModel>();
+
+            foreach (var item in Cart.Items)
             {
-                CartItems = Cart.Items.ToDictionary(
-                    cartItemKey => products.First(product => product.Id == cartItemKey.ProductId),
-                    cartItemValue => cartItemValue.Quantity)
+                CartItemViewModel cartItem = new CartItemViewModel()
+                {
+                   Product = products.First(p => p.Id==item.ProductId),
+                   Quantity = item.Quantity
+                };
+
+                cartItems.Add(cartItem);
+            }
+
+            CartViewModel cartViewModel = new CartViewModel()
+            {
+                CartItems = cartItems
             };
+
             return cartViewModel;
+        }
+
+        public Cart GetCart()
+        {
+            return Cart;
         }
     }
 }

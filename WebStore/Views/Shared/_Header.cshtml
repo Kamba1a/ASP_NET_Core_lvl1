@@ -59,17 +59,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-6">
                     <div class="shop-menu pull-right">
                         <ul class="nav navbar-nav">
                             <li><a href="#"><i class="fa fa-user"></i> Account</a></li>
                             <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
                             <li><a asp-controller="home" asp-action="Checkout"><i class="fa fa-crosshairs"></i> Checkout</a></li>
                             <li><a asp-controller="Cart" asp-action="Cart"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+
+                            @if (User.IsInRole("Admins"))
+                            {
+                                <li><a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-gear"></i> Админка</a></li>
+                            }
                         </ul>
                     </div>
                 </div>
-                <div class="col-sm-3">
+                <div>
                     @await Component.InvokeAsync("LoginLogout")
                     @*<vc:login-logout></vc:login-logout>*@@*<=> LoginLogout*@
                 </div>

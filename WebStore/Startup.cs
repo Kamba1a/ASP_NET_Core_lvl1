@@ -91,6 +91,7 @@ namespace WebStore
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); //для работы служебного класса HttpContextAccessor также нужно прописывать зависимость
             services.AddScoped<ICartService, CookieCartService>(); //корзина - AddScoped!
+            services.AddScoped<ISqlOrderService, SqlOrderService>();
         }
 
 
@@ -116,6 +117,9 @@ namespace WebStore
 
             app.UseEndpoints(endpoints =>
             {
+                //области
+                endpoints.MapControllerRoute("areas", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
                 //контроллер по-умолчанию (имя контроллера/имя метода/действие)
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{Id?}");
 

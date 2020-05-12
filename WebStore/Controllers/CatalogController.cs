@@ -47,6 +47,7 @@ namespace WebStore.Controllers
 
             ProductViewModel productViewModel = new ProductViewModel()
             {
+                Id = product.Id,
                 Name = product.Name,
                 Price = product.Price,
                 ImageUrl = product.ImageUrl,

@@ -19,6 +19,7 @@
                         <input asp-for="RememberMe" type="checkbox" class="checkbox">
                         Keep me signed in
                     </span>
+                    <input asp-for="ReturnUrl" type="hidden" /> @*в принятой модели LoginUserViewModel было задано значение ReturnUrl, поэтому передаем его дальше с моделью, которую теперь отправляем*@
                     <button type="submit" class="btn btn-default">Login</button>
                 </form>
             </div><!--/login form-->

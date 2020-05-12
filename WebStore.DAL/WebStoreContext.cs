@@ -31,5 +31,13 @@ namespace WebStore.DAL
         /// Таблица БД с перечнем категорий
         /// </summary>
         public DbSet<Section> Sections { get; set; }
+        /// <summary>
+        /// Таблица БД с перечнем заказов
+        /// </summary>
+        public DbSet<Order> Orders { get; set; }
+        /// <summary>
+        /// Таблица БД с перечнем заказанных товаров
+        /// </summary>
+        public DbSet<OrderItem> OrderItems { get; set; }
     }
 }

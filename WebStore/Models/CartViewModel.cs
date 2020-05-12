@@ -8,7 +8,7 @@ namespace WebStore.Models
 {
     public class CartViewModel
     {
-        public Dictionary<ProductViewModel, int> CartItems { get; set; }
-        public int ItemsCount => CartItems?.Sum(itemCount => itemCount.Value) ?? 0;
+        public IEnumerable <CartItemViewModel> CartItems { get; set; }
+        public decimal TotalPrice => CartItems.Sum(item => item.Price * item.Quantity);
     }
 }
